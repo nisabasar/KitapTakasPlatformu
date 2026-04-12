@@ -1,0 +1,41 @@
+﻿@model IEnumerable<KitapTakasPlatformu.Models.Book>
+@{
+    var requestedBook = ViewBag.RequestedBook as KitapTakasPlatformu.Models.Book;
+    ViewData["Title"] = "Takas İsteği Gönder";
+}
+
+<h2 class="mb-4">Takas İsteği Gönder</h2>
+
+@if (requestedBook != null)
+{
+    <div class="alert alert-info">
+        İstenen kitap: <strong>@requestedBook.Title</strong> - @requestedBook.Author
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">
+        Takas teklif etmek için önce kendi kitaplarını eklemelisin.
+    </div>
+}
+else
+{
+    <form asp-action="SendRequest" method="post">
+        <input type="hidden" name="requestedBookId" value="@requestedBook?.Id" />
+
+        <div class="mb-3">
+            <label class="form-label">Takas için sunacağın kitabı seç</label>
+            <select name="offeredBookId" class="form-select" required>
+                <option value="">Seçiniz</option>
+                @foreach (var book in Model)
+                {
+                    <option value="@book.Id">@book.Title - @book.Author</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">İstek Gönder</button>
+        <a asp-controller="Books" asp-action="Details" asp-route-id="@requestedBook?.Id" class="btn btn-secondary">İptal</a>
+    </form>
+}

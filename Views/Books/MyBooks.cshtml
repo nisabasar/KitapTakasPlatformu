@@ -1,0 +1,40 @@
+﻿@model IEnumerable<KitapTakasPlatformu.Models.Book>
+
+@{
+    ViewData["Title"] = "Kitaplarım";
+}
+
+<h2 class="mb-4">Kitaplarım</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Henüz eklenmiş kitap yok.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Kitap Adı</th>
+                <th>Yazar</th>
+                <th>Kategori</th>
+                <th>Durum</th>
+                <th>Uygun mu?</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Author</td>
+                    <td>@item.Category</td>
+                    <td>@item.Condition</td>
+                    <td>@(item.IsAvailable ? "Evet" : "Hayır")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

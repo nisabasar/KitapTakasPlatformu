@@ -1,0 +1,33 @@
+﻿@model KitapTakasPlatformu.Models.Book
+
+@{
+    ViewData["Title"] = "Kitap Detayı";
+}
+
+<h2 class="mb-4">Kitap Detayı</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h3>@Model.Title</h3>
+        <p><strong>Yazar:</strong> @Model.Author</p>
+        <p><strong>Kategori:</strong> @Model.Category</p>
+        <p><strong>Durum:</strong> @Model.Condition</p>
+        <p><strong>Açıklama:</strong> @Model.Description</p>
+        <p><strong>Sahibi:</strong> @(string.IsNullOrWhiteSpace(Model.Owner?.FullName) ? Model.Owner?.Email : Model.Owner?.FullName)</p>
+        <p><strong>Eklenme Tarihi:</strong> @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+
+        <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+        <a asp-controller="Exchanges" asp-action="SendRequest" asp-route-requestedBookId="@Model.Id" class="btn btn-primary">
+            Takas İsteği Gönder
+        </a>
+    </div>
+</div>

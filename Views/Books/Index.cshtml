@@ -1,0 +1,61 @@
+﻿@model IEnumerable<KitapTakasPlatformu.Models.Book>
+
+@{
+    ViewData["Title"] = "Kitaplar";
+}
+
+<h2 class="mb-4">Kitaplar</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<form method="get" asp-action="Index" class="mb-4">
+    <div class="row">
+        <div class="col-md-8">
+            <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Kitap adı, yazar veya kategori ara..." />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Ara</button>
+        </div>
+        <div class="col-md-2">
+            <a asp-action="Create" class="btn btn-success w-100">+ Kitap Ekle</a>
+        </div>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">
+        Aradığınız kriterlere uygun kitap bulunamadı.
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@item.Author</h6>
+
+                        <p class="card-text">
+                            <strong>Kategori:</strong> @item.Category <br />
+                            <strong>Durum:</strong> @item.Condition <br />
+                            <strong>Sahibi:</strong> @(string.IsNullOrWhiteSpace(item.Owner?.FullName) ? item.Owner?.Email : item.Owner?.FullName)
+                        </p>
+
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary">Detay</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

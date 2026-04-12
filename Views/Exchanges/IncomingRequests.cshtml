@@ -1,0 +1,57 @@
+﻿@model IEnumerable<KitapTakasPlatformu.Models.ExchangeRequest>
+
+@{
+    ViewData["Title"] = "Takas İstekleri";
+}
+
+<h2 class="mb-4">Gelen Takas İstekleri</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Henüz gelen takas isteği yok.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>İsteyen</th>
+                <th>İstenen Kitap</th>
+                <th>Teklif Edilen Kitap</th>
+                <th>Durum</th>
+                <th>Tarih</th>
+                <th>İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(string.IsNullOrWhiteSpace(item.Requester?.FullName) ? item.Requester?.Email : item.Requester?.FullName)</td>
+                    <td>@item.RequestedBook?.Title</td>
+                    <td>@item.OfferedBook?.Title</td>
+                    <td>@item.Status</td>
+                    <td>@item.RequestedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>
+                        @if (item.Status == "Bekliyor")
+                        {
+                            <a asp-action="Accept" asp-route-id="@item.Id" class="btn btn-success btn-sm">Kabul Et</a>
+                            <a asp-action="Reject" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Reddet</a>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
